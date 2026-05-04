@@ -1,19 +1,223 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh">
 <head>
-    <title>我的第一个网站</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 工具平台</title>
 
-    <style>
-    body {
-        background-color: #f0f0f0;
-        text-align: center;
-        font-family: Arial;
-    }
-    </style>
+<style>
+body {
+    margin: 0;
+    font-family: Arial;
+    background: #f5f5f5;
+}
 
+.navbar {
+    background: #222;
+    color: white;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.navbar button {
+    margin-left: 10px;
+}
+
+.container {
+    display: flex;
+    height: calc(100vh - 50px);
+}
+
+.sidebar {
+    width: 220px;
+    background: #333;
+    color: white;
+    padding: 10px;
+}
+
+.sidebar div {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.sidebar div:hover {
+    background: #444;
+}
+
+.content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+/* 聊天 */
+.chat-box {
+    height: 70%;
+    overflow-y: auto;
+    background: white;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.message {
+    margin: 10px 0;
+}
+
+.user {
+    text-align: right;
+    color: blue;
+}
+
+.bot {
+    text-align: left;
+    color: green;
+}
+
+.input-area {
+    margin-top: 10px;
+    display: flex;
+}
+
+input, textarea {
+    padding: 10px;
+    margin: 5px 0;
+    width: 100%;
+}
+
+button {
+    padding: 10px;
+    cursor: pointer;
+}
+</style>
 </head>
+
 <body>
-    <h1>Hello World!</h1>
-    <p>这是我用 GitHub 搭建的网站</p>
+
+<div class="navbar">
+    <div>AI 工具平台</div>
+    <div>
+        <button onclick="showPage('login')">登录</button>
+        <button onclick="showPage('register')">注册</button>
+    </div>
+</div>
+
+<div class="container">
+
+    <div class="sidebar">
+        <div onclick="showPage('chat')">💬 聊天</div>
+        <div onclick="showPage('profile')">🧠 人物画像</div>
+        <div onclick="showPage('project')">📂 专项专栏</div>
+        <div onclick="showPage('upload')">📤 上传文件</div>
+        <div onclick="showPage('payment')">💰 充值</div>
+    </div>
+
+    <div class="content">
+
+        <!-- 登录 -->
+        <div id="login" class="page">
+            <h2>登录</h2>
+            <input placeholder="账号"><br>
+            <input type="password" placeholder="密码"><br>
+            <button>登录</button>
+        </div>
+
+        <!-- 注册 -->
+        <div id="register" class="page" style="display:none">
+            <h2>注册</h2>
+            <input placeholder="账号"><br>
+            <input type="password" placeholder="密码"><br>
+            <input placeholder="邀请码"><br>
+            <button>注册</button>
+        </div>
+
+        <!-- 聊天 -->
+        <div id="chat" class="page" style="display:none">
+            <h2>聊天</h2>
+            <div class="chat-box" id="chatBox"></div>
+
+            <div class="input-area">
+                <input id="chatInput" placeholder="输入内容...">
+                <button onclick="sendMessage()">发送</button>
+            </div>
+        </div>
+
+        <!-- 人物画像 -->
+        <div id="profile" class="page" style="display:none">
+            <h2>人物画像</h2>
+            <textarea placeholder="输入你的信息（兴趣、习惯、目标等）"></textarea>
+            <button>更新画像</button>
+
+            <h3>当前画像：</h3>
+            <div id="profileData">
+                暂无数据
+            </div>
+        </div>
+
+        <!-- 专栏 -->
+        <div id="project" class="page" style="display:none">
+            <h2>专项专栏</h2>
+
+            <input placeholder="新建专栏名称">
+            <button>创建</button>
+
+            <h3>你的专栏：</h3>
+            <ul>
+                <li>氢能</li>
+                <li>AI学习</li>
+            </ul>
+        </div>
+
+        <!-- 上传 -->
+        <div id="upload" class="page" style="display:none">
+            <h2>上传文件</h2>
+            <input type="file">
+            <button>上传</button>
+        </div>
+
+        <!-- 充值 -->
+        <div id="payment" class="page" style="display:none">
+            <h2>充值</h2>
+            <button>购买 10 元</button>
+            <button>购买 50 元</button>
+            <button>购买 100 元</button>
+        </div>
+
+    </div>
+</div>
+
+<script>
+function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
+    document.getElementById(id).style.display = 'block';
+}
+
+// 聊天逻辑（前端模拟）
+function sendMessage() {
+    const input = document.getElementById("chatInput");
+    const text = input.value;
+
+    if (!text) return;
+
+    const chatBox = document.getElementById("chatBox");
+
+    chatBox.innerHTML += `<div class="message user">${text}</div>`;
+
+    // 👉 这里未来接 GPT API
+    fakeAI(text);
+
+    input.value = "";
+}
+
+function fakeAI(text) {
+    const chatBox = document.getElementById("chatBox");
+
+    setTimeout(() => {
+        chatBox.innerHTML += `<div class="message bot">AI 回复：${text}</div>`;
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }, 500);
+}
+</script>
+
 </body>
 </html>
