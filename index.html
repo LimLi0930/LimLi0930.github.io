@@ -3,220 +3,239 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI 工具平台</title>
+<title>AI 工作台</title>
 
 <style>
 body {
     margin: 0;
-    font-family: Arial;
-    background: #f5f5f5;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
+    background: #343541;
+    color: white;
 }
 
-.navbar {
-    background: #222;
-    color: white;
+/* 布局 */
+.app {
+    display: flex;
+    height: 100vh;
+}
+
+/* 左侧栏 */
+.sidebar {
+    width: 260px;
+    background: #202123;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-header {
     padding: 10px;
+}
+
+.new-chat {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #555;
+    background: transparent;
+    color: white;
+    border-radius: 6px;
+}
+
+.chat-list {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.chat-item {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.chat-item:hover {
+    background: #2a2b32;
+}
+
+/* 主区域 */
+.main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 顶部 */
+.header {
+    padding: 10px;
+    border-bottom: 1px solid #444;
     display: flex;
     justify-content: space-between;
 }
 
-.navbar button {
-    margin-left: 10px;
-}
-
-.container {
-    display: flex;
-    height: calc(100vh - 50px);
-}
-
-.sidebar {
-    width: 220px;
-    background: #333;
-    color: white;
-    padding: 10px;
-}
-
-.sidebar div {
-    padding: 10px;
-    cursor: pointer;
-}
-
-.sidebar div:hover {
-    background: #444;
-}
-
-.content {
+/* 聊天区域 */
+.chat-container {
     flex: 1;
+    overflow-y: auto;
     padding: 20px;
-    overflow-y: auto;
 }
 
-/* 聊天 */
-.chat-box {
-    height: 70%;
-    overflow-y: auto;
-    background: white;
-    padding: 10px;
-    border-radius: 10px;
-}
-
+/* 消息 */
 .message {
-    margin: 10px 0;
+    margin: 20px 0;
+    display: flex;
 }
 
 .user {
-    text-align: right;
-    color: blue;
+    justify-content: flex-end;
 }
 
 .bot {
-    text-align: left;
-    color: green;
+    justify-content: flex-start;
 }
 
+.bubble {
+    max-width: 60%;
+    padding: 12px;
+    border-radius: 10px;
+    line-height: 1.5;
+}
+
+.user .bubble {
+    background: #4f46e5;
+}
+
+.bot .bubble {
+    background: #444654;
+}
+
+/* 输入框 */
 .input-area {
-    margin-top: 10px;
-    display: flex;
+    padding: 15px;
+    border-top: 1px solid #444;
+    background: #40414f;
 }
 
-input, textarea {
+.input-box {
+    display: flex;
+    background: #343541;
+    border-radius: 10px;
     padding: 10px;
-    margin: 5px 0;
-    width: 100%;
+}
+
+textarea {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: white;
+    resize: none;
+    outline: none;
 }
 
 button {
-    padding: 10px;
+    background: #4f46e5;
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 6px;
     cursor: pointer;
+}
+
+/* 滚动条 */
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 10px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="navbar">
-    <div>AI 工具平台</div>
-    <div>
-        <button onclick="showPage('login')">登录</button>
-        <button onclick="showPage('register')">注册</button>
-    </div>
-</div>
+<div class="app">
 
-<div class="container">
-
+    <!-- 左侧 -->
     <div class="sidebar">
-        <div onclick="showPage('chat')">💬 聊天</div>
-        <div onclick="showPage('profile')">🧠 人物画像</div>
-        <div onclick="showPage('project')">📂 专项专栏</div>
-        <div onclick="showPage('upload')">📤 上传文件</div>
-        <div onclick="showPage('payment')">💰 充值</div>
+        <div class="sidebar-header">
+            <button class="new-chat" onclick="newChat()">+ 新对话</button>
+        </div>
+
+        <div class="chat-list" id="chatList">
+            <div class="chat-item">默认对话</div>
+        </div>
+
+        <div style="padding:10px; border-top:1px solid #333;">
+            <div onclick="alert('人物画像功能')">🧠 人物画像</div>
+            <div onclick="alert('专项专栏功能')">📂 专栏</div>
+            <div onclick="alert('充值功能')">💰 充值</div>
+        </div>
     </div>
 
-    <div class="content">
+    <!-- 主区域 -->
+    <div class="main">
 
-        <!-- 登录 -->
-        <div id="login" class="page">
-            <h2>登录</h2>
-            <input placeholder="账号"><br>
-            <input type="password" placeholder="密码"><br>
-            <button>登录</button>
-        </div>
-
-        <!-- 注册 -->
-        <div id="register" class="page" style="display:none">
-            <h2>注册</h2>
-            <input placeholder="账号"><br>
-            <input type="password" placeholder="密码"><br>
-            <input placeholder="邀请码"><br>
-            <button>注册</button>
-        </div>
-
-        <!-- 聊天 -->
-        <div id="chat" class="page" style="display:none">
-            <h2>聊天</h2>
-            <div class="chat-box" id="chatBox"></div>
-
-            <div class="input-area">
-                <input id="chatInput" placeholder="输入内容...">
-                <button onclick="sendMessage()">发送</button>
+        <div class="header">
+            <div>AI 助手</div>
+            <div>
+                <select>
+                    <option>GPT-4</option>
+                    <option>Gemini</option>
+                </select>
             </div>
         </div>
 
-        <!-- 人物画像 -->
-        <div id="profile" class="page" style="display:none">
-            <h2>人物画像</h2>
-            <textarea placeholder="输入你的信息（兴趣、习惯、目标等）"></textarea>
-            <button>更新画像</button>
+        <div class="chat-container" id="chatContainer"></div>
 
-            <h3>当前画像：</h3>
-            <div id="profileData">
-                暂无数据
+        <div class="input-area">
+            <div class="input-box">
+                <textarea id="input" rows="1" placeholder="输入消息..."></textarea>
+                <button onclick="send()">发送</button>
             </div>
         </div>
 
-        <!-- 专栏 -->
-        <div id="project" class="page" style="display:none">
-            <h2>专项专栏</h2>
-
-            <input placeholder="新建专栏名称">
-            <button>创建</button>
-
-            <h3>你的专栏：</h3>
-            <ul>
-                <li>氢能</li>
-                <li>AI学习</li>
-            </ul>
-        </div>
-
-        <!-- 上传 -->
-        <div id="upload" class="page" style="display:none">
-            <h2>上传文件</h2>
-            <input type="file">
-            <button>上传</button>
-        </div>
-
-        <!-- 充值 -->
-        <div id="payment" class="page" style="display:none">
-            <h2>充值</h2>
-            <button>购买 10 元</button>
-            <button>购买 50 元</button>
-            <button>购买 100 元</button>
-        </div>
-
     </div>
+
 </div>
 
 <script>
-function showPage(id) {
-    document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
-    document.getElementById(id).style.display = 'block';
+
+function addMessage(text, role) {
+    const container = document.getElementById("chatContainer");
+
+    const msg = document.createElement("div");
+    msg.className = "message " + role;
+
+    const bubble = document.createElement("div");
+    bubble.className = "bubble";
+    bubble.innerText = text;
+
+    msg.appendChild(bubble);
+    container.appendChild(msg);
+
+    container.scrollTop = container.scrollHeight;
 }
 
-// 聊天逻辑（前端模拟）
-function sendMessage() {
-    const input = document.getElementById("chatInput");
-    const text = input.value;
-
+// 发送消息
+function send() {
+    const input = document.getElementById("input");
+    const text = input.value.trim();
     if (!text) return;
 
-    const chatBox = document.getElementById("chatBox");
-
-    chatBox.innerHTML += `<div class="message user">${text}</div>`;
-
-    // 👉 这里未来接 GPT API
-    fakeAI(text);
+    addMessage(text, "user");
 
     input.value = "";
-}
 
-function fakeAI(text) {
-    const chatBox = document.getElementById("chatBox");
-
+    // 模拟 AI
     setTimeout(() => {
-        chatBox.innerHTML += `<div class="message bot">AI 回复：${text}</div>`;
-        chatBox.scrollTop = chatBox.scrollHeight;
+        addMessage("AI 回复：" + text, "bot");
     }, 500);
+
+    // 👉 未来接 API
 }
+
+// 新对话
+function newChat() {
+    document.getElementById("chatContainer").innerHTML = "";
+}
+
 </script>
 
 </body>
